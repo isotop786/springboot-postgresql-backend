@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -121,6 +119,58 @@ public class TutorialController {
 	}
 	
 	// update tutorial ends
+	
+	// delete by id
+	@DeleteMapping("/tutorials/{id}")
+	public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id")long id)
+	{
+		try {
+			tutorialRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch(Exception e)
+		{
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	// delete by id ends
+	
+	// delete all
+	@DeleteMapping("/tutorials")
+	public ResponseEntity<HttpStatus> deleteAllTutorials()
+	{
+		try {
+			tutorialRepository.deleteAll();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch(Exception e)
+		{
+			return new ResponseEntity<> (HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	// delete all ends
+	
+	// get published tutorials
+	@GetMapping("/tutorials/published")
+	public ResponseEntity<List<Tutorial>> findByPublished()
+	{
+		try {
+			List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
+			
+			if(tutorials.isEmpty())
+			{
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			
+			return new ResponseEntity<> (tutorials, HttpStatus.OK);
+		}
+		catch(Exception e)
+		{
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	// get published tutorials ends
 	
 	
 	
